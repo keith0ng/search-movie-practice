@@ -16,6 +16,9 @@
 		F031AB2C2390F88300ACB87F /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F031AB2B2390F88300ACB87F /* UIView.swift */; };
 		F031AB2E2390F8B500ACB87F /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F031AB2D2390F8B500ACB87F /* SearchView.swift */; };
 		F031AB302390F8EC00ACB87F /* SearchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F031AB2F2390F8EC00ACB87F /* SearchView.xib */; };
+		F098C5F02390FF7E008025D6 /* MovieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098C5EF2390FF7E008025D6 /* MovieListViewController.swift */; };
+		F098C5F22390FF8C008025D6 /* MovieListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098C5F12390FF8C008025D6 /* MovieListView.swift */; };
+		F098C5F42390FF95008025D6 /* MovieListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F098C5F32390FF95008025D6 /* MovieListView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		F031AB2B2390F88300ACB87F /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		F031AB2D2390F8B500ACB87F /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		F031AB2F2390F8EC00ACB87F /* SearchView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchView.xib; sourceTree = "<group>"; };
+		F098C5EF2390FF7E008025D6 /* MovieListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListViewController.swift; sourceTree = "<group>"; };
+		F098C5F12390FF8C008025D6 /* MovieListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
+		F098C5F32390FF95008025D6 /* MovieListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieListView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				F031AB252390F7CE00ACB87F /* SearchViewController.swift */,
+				F098C5EF2390FF7E008025D6 /* MovieListViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -89,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				F031AB2D2390F8B500ACB87F /* SearchView.swift */,
+				F098C5F12390FF8C008025D6 /* MovieListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -105,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				F031AB2F2390F8EC00ACB87F /* SearchView.xib */,
+				F098C5F32390FF95008025D6 /* MovieListView.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -175,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F031AB302390F8EC00ACB87F /* SearchView.xib in Resources */,
+				F098C5F42390FF95008025D6 /* MovieListView.xib in Resources */,
 				F031AB1D2390F74500ACB87F /* LaunchScreen.storyboard in Resources */,
 				F031AB1A2390F74400ACB87F /* Assets.xcassets in Resources */,
 				F031AB182390F74400ACB87F /* Main.storyboard in Resources */,
@@ -189,8 +199,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F031AB2E2390F8B500ACB87F /* SearchView.swift in Sources */,
+				F098C5F22390FF8C008025D6 /* MovieListView.swift in Sources */,
 				F031AB2C2390F88300ACB87F /* UIView.swift in Sources */,
 				F031AB2A2390F7CE00ACB87F /* SearchViewController.swift in Sources */,
+				F098C5F02390FF7E008025D6 /* MovieListViewController.swift in Sources */,
 				F031AB112390F74400ACB87F /* AppDelegate.swift in Sources */,
 				F031AB132390F74400ACB87F /* SceneDelegate.swift in Sources */,
 			);

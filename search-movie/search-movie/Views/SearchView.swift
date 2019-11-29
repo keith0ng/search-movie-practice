@@ -37,8 +37,6 @@ class SearchView: UIView {
     func setupView() {
         let viewFromNib = viewFromOwnedNib()
         addSubviewAndFill(viewFromNib)
-        
-        
         movieSearchBar.delegate = self
     }
 

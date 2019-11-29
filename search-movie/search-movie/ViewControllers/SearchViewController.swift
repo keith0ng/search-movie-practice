@@ -25,7 +25,8 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: SearchViewDelegate {
     func searchButtonTapped(searchBar: UISearchBar) {
-        
+        let movieListVC = MovieListViewController()
+        navigationController?.pushViewController(movieListVC, animated: true)
     }
     
     func searchBarDidBeginEditing(searchBar: UISearchBar) {
