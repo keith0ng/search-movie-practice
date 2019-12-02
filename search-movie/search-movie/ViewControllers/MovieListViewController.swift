@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class MovieListViewController: UIViewController {
 
@@ -21,7 +22,8 @@ class MovieListViewController: UIViewController {
     }
     
     var searchKeyword: String?
-    var currentPage: Int?
+    var currentPage: Int = 1
+    var totalPage: Int = 0
     
     override func loadView() {
         mainView = MovieListView()
@@ -38,12 +40,14 @@ class MovieListViewController: UIViewController {
         
         let movieCell = UINib(nibName: "MovieTableViewCell", bundle: nil)
         mainView?.tableView?.register(movieCell, forCellReuseIdentifier: "MovieTableViewCellReuseIdentifier")
-        
-        currentPage = 1
-        getSearchResults(keyword: searchKeyword, page: currentPage ?? 1)
+        getSearchResults(keyword: searchKeyword, page: currentPage)
     }
     
-    func getSearchResults(keyword: String?, page: Int) {
+    private func getPosterPath(posterPath: String?) -> String {
+        return "https://image.tmdb.org/t/p/original/\(posterPath ?? "")"
+    }
+    
+    private func getSearchResults(keyword: String?, page: Int) {
         // Use a better API request especially on projects with several endpoints. Alamofire is the most common.
         // For simplicity, use the URL Session.
         
@@ -60,21 +64,18 @@ class MovieListViewController: UIViewController {
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, err -> Void in
             let movieResult = self.getMovieResult(data: data)
+            self.totalPage = movieResult?.total_pages ?? 0
+            print("total page \(self.totalPage)")
+            self.currentPage = page
             let moviesFromData = movieResult?.results
-            
-            
-            print("movieResultCount = \(moviesFromData?.count)")
-            
-            print("movieCount = \(self.movieArray?.count)")
             self.movieArray?.append(contentsOf: moviesFromData ?? [])
-            print("movieCount2 = \(self.movieArray?.count)")
         })
         
         task.resume()
     }
     
     
-    func getMovieResult(data: Data?) -> GetMovieResult? {
+    private func getMovieResult(data: Data?) -> GetMovieResult? {
         if let _ = data {
             do {
                 var movieResult: GetMovieResult
@@ -107,6 +108,9 @@ extension MovieListViewController: UITableViewDataSource {
             movieCell.ratingLabel.text = "\(movie?.vote_average ?? 0.0)"
             movieCell.overviewLabel.text = movie?.overview
             
+            let posterURL = URL(string: getPosterPath(posterPath: movie?.poster_path ?? ""))
+            movieCell.posterImage.sd_setImage(with: posterURL, completed: nil)
+            
             return movieCell
         }
         
@@ -114,13 +118,19 @@ extension MovieListViewController: UITableViewDataSource {
         return UITableViewCell()
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let height = scrollView.frame.size.height
-        let contentYOffset = scrollView.contentOffset.y
-        let distanceFromBottom = scrollView.contentSize.height - contentYOffset
-        if distanceFromBottom < height {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        print("current offset \(currentOffset)")
+        print("max offset \(maximumOffset)")
+        
+        if (maximumOffset - currentOffset) <= 10.0 {
             print("Table scrolled to bottom")
-//            getSearchResults(keyword: searchKeyword, page: (currentPage ?? 1) + 1)
+            let nextPage = currentPage + 1
+            if nextPage <= totalPage {
+                getSearchResults(keyword: searchKeyword, page: nextPage)
+            }
         }
     }
 }

@@ -88,7 +88,7 @@
             <connections>
                 <outlet property="dateLabel" destination="PAp-o2-JZr" id="9j0-qh-IEe"/>
                 <outlet property="overviewLabel" destination="fqV-V9-OG9" id="HLO-14-zeb"/>
-                <outlet property="posterImag" destination="p4u-mS-GPF" id="PIm-JR-3lD"/>
+                <outlet property="posterImage" destination="p4u-mS-GPF" id="P1y-Ee-gWQ"/>
                 <outlet property="ratingLabel" destination="Iqj-5p-qph" id="eBR-eW-6hM"/>
                 <outlet property="titleLabel" destination="hZS-bG-TNK" id="NYf-kT-ZwS"/>
             </connections>
