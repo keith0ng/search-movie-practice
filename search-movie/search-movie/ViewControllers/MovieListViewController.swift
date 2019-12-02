@@ -11,7 +11,15 @@ import UIKit
 class MovieListViewController: UIViewController {
 
     var mainView: MovieListView?
-    var movieArray: [Movie]? = []
+    
+    var movieArray: [Movie]? = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.mainView?.tableView.reloadData()
+            }
+        }
+    }
+    
     var searchKeyword: String?
     var currentPage: Int?
     
@@ -25,6 +33,10 @@ class MovieListViewController: UIViewController {
         
         mainView?.tableView?.delegate = self
         mainView?.tableView?.dataSource = self
+        
+        let movieCell = UINib(nibName: "MovieTableViewCell", bundle: nil)
+        mainView?.tableView?.register(movieCell, forCellReuseIdentifier: "MovieTableViewCellReuseIdentifier")
+        
         currentPage = 1
         getSearchResults(keyword: searchKeyword, page: currentPage ?? 1)
     }
@@ -76,19 +88,31 @@ class MovieListViewController: UIViewController {
 }
 
 extension MovieListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 335
+    }
     
 }
 
 extension MovieListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return movieArray?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellReuseIdentifier")
+        if let movieCell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCellReuseIdentifier") as? MovieTableViewCell {
+            let row = indexPath.row
+            let movie = movieArray?[row]
+            movieCell.titleLabel.text = movie?.title
+            movieCell.dateLabel.text = movie?.release_date
+            movieCell.ratingLabel.text = "\(movie?.vote_average ?? 0.0)"
+            movieCell.overviewLabel.text = movie?.overview
+            
+            return movieCell
+        }
         
-        cell.textLabel?.text = "Hello, world"
-        return cell
+        
+        return UITableViewCell()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
