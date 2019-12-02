@@ -11,11 +11,13 @@ import UIKit
 protocol SearchViewDelegate {
     func searchButtonTapped(searchBar: UISearchBar)
     func searchBarDidBeginEditing(searchBar: UISearchBar)
+    func searchBarCencelButtonTapped(searchBar: UISearchBar)
 }
 
 class SearchView: UIView {
     
     @IBOutlet weak var movieSearchBar: UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
     
     var delegate: SearchViewDelegate?
     
@@ -45,7 +47,6 @@ class SearchView: UIView {
 extension SearchView: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
         delegate?.searchButtonTapped(searchBar: searchBar)
     }
     
@@ -53,4 +54,8 @@ extension SearchView: UISearchBarDelegate {
         delegate?.searchBarDidBeginEditing(searchBar: searchBar)
     }
     
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        delegate?.searchBarCencelButtonTapped(searchBar: searchBar)
+    }
 }

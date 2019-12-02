@@ -10,6 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchView" customModule="search_movie" customModuleProvider="target">
             <connections>
                 <outlet property="movieSearchBar" destination="XrQ-cy-z6U" id="YxI-JQ-v7p"/>
+                <outlet property="tableView" destination="K5f-ok-f7D" id="9Ws-lj-9aK"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -17,13 +18,24 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <searchBar contentMode="redraw" id="XrQ-cy-z6U">
-                    <rect key="frame" x="0.0" y="177" width="414" height="44"/>
+                <searchBar contentMode="redraw" showsCancelButton="YES" id="XrQ-cy-z6U">
+                    <rect key="frame" x="0.0" y="88" width="414" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <textInputTraits key="textInputTraits"/>
                 </searchBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="K5f-ok-f7D">
+                    <rect key="frame" x="0.0" y="132" width="414" height="730"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                </tableView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="K5f-ok-f7D" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="XR0-jN-7I6"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="K5f-ok-f7D" secondAttribute="trailing" id="YLT-xs-w2g"/>
+                <constraint firstItem="K5f-ok-f7D" firstAttribute="top" secondItem="XrQ-cy-z6U" secondAttribute="bottom" id="ZJv-SM-38h"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="K5f-ok-f7D" secondAttribute="bottom" id="vk1-lx-TCY"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="139" y="149"/>
         </view>

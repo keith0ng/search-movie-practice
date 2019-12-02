@@ -25,6 +25,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: SearchViewDelegate {
     func searchButtonTapped(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
         let movieListVC = MovieListViewController()
         movieListVC.searchKeyword = searchBar.text?.lowercased()
         navigationController?.pushViewController(movieListVC, animated: true)
@@ -32,5 +33,9 @@ extension SearchViewController: SearchViewDelegate {
     
     func searchBarDidBeginEditing(searchBar: UISearchBar) {
         
+    }
+    
+    func searchBarCencelButtonTapped(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }
