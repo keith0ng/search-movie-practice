@@ -11,6 +11,7 @@ import UIKit
 class SearchViewController: UIViewController {
 
     var mainView: SearchView?
+    var recentSearches:[String]?
     
     override func loadView() {
         mainView = SearchView()
@@ -24,6 +25,11 @@ class SearchViewController: UIViewController {
         mainView?.tableView.delegate = self
         mainView?.tableView.dataSource = self
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let userDefaults = UserDefaults.standard
+        recentSearches = userDefaults.stringArray(forKey: "RecentSearchKey")
+    }
 }
 
 extension SearchViewController: SearchViewDelegate {
@@ -33,9 +39,12 @@ extension SearchViewController: SearchViewDelegate {
         let movieListVC = MovieListViewController()
         movieListVC.searchKeyword = searchBar.text?.lowercased()
         navigationController?.pushViewController(movieListVC, animated: true)
+        
+        searchBar.text = ""
     }
     
     func searchBarDidBeginEditing(searchBar: UISearchBar) {
+        mainView?.tableView.reloadData()
         mainView?.tableView.isHidden = false
     }
     
@@ -47,22 +56,24 @@ extension SearchViewController: SearchViewDelegate {
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        mainView?.movieSearchBar.resignFirstResponder()        
+        mainView?.tableView.isHidden = true
+        mainView?.movieSearchBar.resignFirstResponder()
         let movieListVC = MovieListViewController()
-        movieListVC.searchKeyword = ""
+        let row = indexPath.row
+        movieListVC.searchKeyword = recentSearches?[row]
         navigationController?.pushViewController(movieListVC, animated: true)
     }
 }
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return recentSearches?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "cellReuseIdentifier")
         let row = indexPath.row
-        cell.textLabel?.text = "Hello, world."
+        cell.textLabel?.text = recentSearches?[row]
         return cell
     }
 }

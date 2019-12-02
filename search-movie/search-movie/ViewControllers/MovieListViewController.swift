@@ -74,6 +74,7 @@ class MovieListViewController: UIViewController {
                 
                 if let moviesFromData = movieResult?.results, !(moviesFromData.isEmpty) {
                     self.movieArray?.append(contentsOf: moviesFromData)
+                    self.saveSearch(keyword ?? "")
                 } else {
                     self.showErrorAlert(message: "No results found")
                 }
@@ -83,6 +84,22 @@ class MovieListViewController: UIViewController {
         
         isRequesting = true
         task.resume()
+    }
+    
+    func saveSearch(_ searchString: String) {
+        
+        let userDefaults = UserDefaults.standard
+        var recentSearchArray = userDefaults.stringArray(forKey: "RecentSearchKey")
+        
+        if recentSearchArray == nil {
+            recentSearchArray = []
+        }
+        if (recentSearchArray?.count ?? 0) >= 10 {
+            recentSearchArray?.removeLast()
+        }
+        recentSearchArray?.insert(searchString, at: 0)
+        
+        userDefaults.set(recentSearchArray, forKey: "RecentSearchKey")
     }
     
     
