@@ -30,17 +30,21 @@ class SearchViewController: UIViewController {
         let userDefaults = UserDefaults.standard
         recentSearches = userDefaults.stringArray(forKey: "RecentSearchKey")
     }
+    
+    func showMovieList(searchString: String) {
+        mainView?.tableView.isHidden = true
+        mainView?.movieSearchBar.resignFirstResponder()
+        let movieListVC = MovieListViewController()
+        movieListVC.searchKeyword = searchString
+        navigationController?.pushViewController(movieListVC, animated: true)
+        
+        mainView?.movieSearchBar.text = ""
+    }
 }
 
 extension SearchViewController: SearchViewDelegate {
     func searchButtonTapped(searchBar: UISearchBar) {
-        mainView?.tableView.isHidden = true
-        searchBar.resignFirstResponder()
-        let movieListVC = MovieListViewController()
-        movieListVC.searchKeyword = searchBar.text
-        navigationController?.pushViewController(movieListVC, animated: true)
-        
-        searchBar.text = ""
+        showMovieList(searchString: searchBar.text ?? "")
     }
     
     func searchBarDidBeginEditing(searchBar: UISearchBar) {
@@ -56,12 +60,8 @@ extension SearchViewController: SearchViewDelegate {
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        mainView?.tableView.isHidden = true
-        mainView?.movieSearchBar.resignFirstResponder()
-        let movieListVC = MovieListViewController()
         let row = indexPath.row
-        movieListVC.searchKeyword = recentSearches?[row]
-        navigationController?.pushViewController(movieListVC, animated: true)
+        showMovieList(searchString: recentSearches?[row] ?? "")
     }
 }
 

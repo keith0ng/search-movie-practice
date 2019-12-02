@@ -172,7 +172,6 @@ extension MovieListViewController: UITableViewDataSource {
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
         if (maximumOffset - currentOffset) <= 10.0 {
-            print("Table scrolled to bottom")
             let nextPage = currentPage + 1
             if nextPage <= totalPage {
                 getSearchResults(keyword: searchKeyword, page: nextPage)
