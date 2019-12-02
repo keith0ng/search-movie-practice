@@ -65,13 +65,19 @@ class MovieListViewController: UIViewController {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, err -> Void in
-            let movieResult = self.getMovieResult(data: data)
-            self.totalPage = movieResult?.total_pages ?? 0
-            self.currentPage = page
-            
-            let moviesFromData = movieResult?.results
-            self.movieArray?.append(contentsOf: moviesFromData ?? [])
-            
+            if err != nil { // Handle any type of error. Let the user try the search again
+                self.showErrorAlert(message: "Something went wrong. Please try again.")
+            } else {
+                let movieResult = self.getMovieResult(data: data)
+                self.totalPage = movieResult?.total_pages ?? 0
+                self.currentPage = page
+                
+                if let moviesFromData = movieResult?.results, !(moviesFromData.isEmpty) {
+                    self.movieArray?.append(contentsOf: moviesFromData)
+                } else {
+                    self.showErrorAlert(message: "No results found")
+                }
+            }
             self.isRequesting = false
         })
         
@@ -91,6 +97,19 @@ class MovieListViewController: UIViewController {
             }
         }
         return nil
+    }
+    
+    func showErrorAlert(title: String = "Error", message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            self.navigationController?.popViewController(animated: true)
+        })
+        alert.addAction(okAction)
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
+        
     }
 
 }
