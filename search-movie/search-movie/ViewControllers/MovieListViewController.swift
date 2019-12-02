@@ -25,6 +25,8 @@ class MovieListViewController: UIViewController {
     var currentPage: Int = 1
     var totalPage: Int = 0
     
+    private var isRequesting: Bool = false
+    
     override func loadView() {
         mainView = MovieListView()
         view = mainView
@@ -65,12 +67,15 @@ class MovieListViewController: UIViewController {
         let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, err -> Void in
             let movieResult = self.getMovieResult(data: data)
             self.totalPage = movieResult?.total_pages ?? 0
-            print("total page \(self.totalPage)")
             self.currentPage = page
+            
             let moviesFromData = movieResult?.results
             self.movieArray?.append(contentsOf: moviesFromData ?? [])
+            
+            self.isRequesting = false
         })
         
+        isRequesting = true
         task.resume()
     }
     
@@ -119,11 +124,13 @@ extension MovieListViewController: UITableViewDataSource {
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if isRequesting {
+            // To handle multiple request when scrollig down multiple times in fast succession.
+            return
+        }
+        
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-        
-        print("current offset \(currentOffset)")
-        print("max offset \(maximumOffset)")
         
         if (maximumOffset - currentOffset) <= 10.0 {
             print("Table scrolled to bottom")
