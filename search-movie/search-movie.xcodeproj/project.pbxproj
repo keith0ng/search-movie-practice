@@ -19,6 +19,8 @@
 		F098C5F02390FF7E008025D6 /* MovieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098C5EF2390FF7E008025D6 /* MovieListViewController.swift */; };
 		F098C5F22390FF8C008025D6 /* MovieListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098C5F12390FF8C008025D6 /* MovieListView.swift */; };
 		F098C5F42390FF95008025D6 /* MovieListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F098C5F32390FF95008025D6 /* MovieListView.xib */; };
+		F098C5F623910588008025D6 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098C5F523910588008025D6 /* Movie.swift */; };
+		F098C5F823910849008025D6 /* GetMovieResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098C5F723910849008025D6 /* GetMovieResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		F098C5EF2390FF7E008025D6 /* MovieListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListViewController.swift; sourceTree = "<group>"; };
 		F098C5F12390FF8C008025D6 /* MovieListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
 		F098C5F32390FF95008025D6 /* MovieListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieListView.xib; sourceTree = "<group>"; };
+		F098C5F523910588008025D6 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
+		F098C5F723910849008025D6 /* GetMovieResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMovieResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +125,8 @@
 		F031AB292390F7CE00ACB87F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F098C5F523910588008025D6 /* Movie.swift */,
+				F098C5F723910849008025D6 /* GetMovieResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -204,6 +210,8 @@
 				F031AB2A2390F7CE00ACB87F /* SearchViewController.swift in Sources */,
 				F098C5F02390FF7E008025D6 /* MovieListViewController.swift in Sources */,
 				F031AB112390F74400ACB87F /* AppDelegate.swift in Sources */,
+				F098C5F823910849008025D6 /* GetMovieResult.swift in Sources */,
+				F098C5F623910588008025D6 /* Movie.swift in Sources */,
 				F031AB132390F74400ACB87F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
