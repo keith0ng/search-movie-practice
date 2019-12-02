@@ -94,6 +94,9 @@ class MovieListViewController: UIViewController {
         if recentSearchArray == nil {
             recentSearchArray = []
         }
+        
+        recentSearchArray?.removeAll {$0 == searchString}
+        
         if (recentSearchArray?.count ?? 0) >= 10 {
             recentSearchArray?.removeLast()
         }

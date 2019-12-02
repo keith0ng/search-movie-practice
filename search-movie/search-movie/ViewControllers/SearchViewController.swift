@@ -37,7 +37,7 @@ extension SearchViewController: SearchViewDelegate {
         mainView?.tableView.isHidden = true
         searchBar.resignFirstResponder()
         let movieListVC = MovieListViewController()
-        movieListVC.searchKeyword = searchBar.text?.lowercased()
+        movieListVC.searchKeyword = searchBar.text
         navigationController?.pushViewController(movieListVC, animated: true)
         
         searchBar.text = ""
