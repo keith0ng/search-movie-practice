@@ -10,6 +10,8 @@ import UIKit
 
 class MovieListView: UIView {
 
+    @IBOutlet weak var tableView: UITableView!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()

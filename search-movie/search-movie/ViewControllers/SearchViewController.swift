@@ -26,6 +26,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: SearchViewDelegate {
     func searchButtonTapped(searchBar: UISearchBar) {
         let movieListVC = MovieListViewController()
+        movieListVC.searchKeyword = searchBar.text?.lowercased()
         navigationController?.pushViewController(movieListVC, animated: true)
     }
     

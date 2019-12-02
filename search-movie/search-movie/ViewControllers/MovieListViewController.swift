@@ -11,6 +11,9 @@ import UIKit
 class MovieListViewController: UIViewController {
 
     var mainView: MovieListView?
+    var movieArray: [Movie]? = []
+    var searchKeyword: String?
+    var currentPage: Int?
     
     override func loadView() {
         mainView = MovieListView()
@@ -19,14 +22,19 @@ class MovieListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        getSearchResults()
-
+        
+        mainView?.tableView?.delegate = self
+        mainView?.tableView?.dataSource = self
+        currentPage = 1
+        getSearchResults(keyword: searchKeyword, page: currentPage ?? 1)
     }
     
-    func getSearchResults() {
+    func getSearchResults(keyword: String?, page: Int) {
         // Use a better API request especially on projects with several endpoints. Alamofire is the most common.
         // For simplicity, use the URL Session.
-        let url = "https://api.themoviedb.org/3/search/movie?api_key=4b951e36d117bbc88ac54eccece53258&query=joker&page=1"
+        
+        
+        let url = "https://api.themoviedb.org/3/search/movie?api_key=4b951e36d117bbc88ac54eccece53258&query=\(keyword ?? "")&page=\(page)"
         
         let request = NSMutableURLRequest(url: URL(string: url)!)
         let session = URLSession.shared
@@ -38,7 +46,14 @@ class MovieListViewController: UIViewController {
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, err -> Void in
             let movieResult = self.getMovieResult(data: data)
-            print("## data: \(movieResult)")
+            let moviesFromData = movieResult?.results
+            
+            
+            print("movieResultCount = \(moviesFromData?.count)")
+            
+            print("movieCount = \(self.movieArray?.count)")
+            self.movieArray?.append(contentsOf: moviesFromData ?? [])
+            print("movieCount2 = \(self.movieArray?.count)")
         })
         
         task.resume()
@@ -58,4 +73,31 @@ class MovieListViewController: UIViewController {
         return nil
     }
 
+}
+
+extension MovieListViewController: UITableViewDelegate {
+    
+}
+
+extension MovieListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellReuseIdentifier")
+        
+        cell.textLabel?.text = "Hello, world"
+        return cell
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let height = scrollView.frame.size.height
+        let contentYOffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYOffset
+        if distanceFromBottom < height {
+            print("Table scrolled to bottom")
+            getSearchResults(keyword: searchKeyword, page: (currentPage ?? 1) + 1)
+        }
+    }
 }
