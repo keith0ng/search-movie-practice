@@ -33,6 +33,8 @@ class MovieListViewController: UIViewController {
         
         mainView?.tableView?.delegate = self
         mainView?.tableView?.dataSource = self
+        mainView?.tableView?.estimatedRowHeight = 335.0
+        mainView?.tableView?.rowHeight = UITableView.automaticDimension
         
         let movieCell = UINib(nibName: "MovieTableViewCell", bundle: nil)
         mainView?.tableView?.register(movieCell, forCellReuseIdentifier: "MovieTableViewCellReuseIdentifier")
@@ -88,9 +90,6 @@ class MovieListViewController: UIViewController {
 }
 
 extension MovieListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 335
-    }
     
 }
 
@@ -104,7 +103,7 @@ extension MovieListViewController: UITableViewDataSource {
             let row = indexPath.row
             let movie = movieArray?[row]
             movieCell.titleLabel.text = movie?.title
-            movieCell.dateLabel.text = movie?.release_date
+            movieCell.dateLabel.text = movie?.release_date == "" ? "-" : movie?.release_date
             movieCell.ratingLabel.text = "\(movie?.vote_average ?? 0.0)"
             movieCell.overviewLabel.text = movie?.overview
             
@@ -121,7 +120,7 @@ extension MovieListViewController: UITableViewDataSource {
         let distanceFromBottom = scrollView.contentSize.height - contentYOffset
         if distanceFromBottom < height {
             print("Table scrolled to bottom")
-            getSearchResults(keyword: searchKeyword, page: (currentPage ?? 1) + 1)
+//            getSearchResults(keyword: searchKeyword, page: (currentPage ?? 1) + 1)
         }
     }
 }
