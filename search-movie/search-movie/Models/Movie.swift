@@ -8,6 +8,8 @@
 
 import Foundation
 
+// Use codable to easily parse json responses from the API
+// as long as the name of the json key matches the variable name
 struct Movie: Codable {
     var id: Int?
     var title: String?

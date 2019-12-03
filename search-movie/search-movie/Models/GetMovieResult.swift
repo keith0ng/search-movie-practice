@@ -7,6 +7,9 @@
 //
 
 import Foundation
+
+// Use codable to easily parse json responses from the API
+// as long as the name of the json key matches the variable name
 struct GetMovieResult: Codable {
     var results: [Movie]?
     var page: Int?

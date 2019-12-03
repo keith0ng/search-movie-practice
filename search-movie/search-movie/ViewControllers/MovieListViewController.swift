@@ -124,7 +124,7 @@ extension MovieListViewController {
     }
     
     private func saveSearch(_ searchString: String) {
-        
+        // UserDefaults is a simple way to save small amount of data that needs to be persisted in the app.
         let userDefaults = UserDefaults.standard
         var recentSearchArray = userDefaults.stringArray(forKey: Constants.DictionaryKeys.RecentSearchKey)
         
@@ -146,6 +146,9 @@ extension MovieListViewController {
 
 // MARK: - UITableViewDelegate
 extension MovieListViewController: UITableViewDelegate {
+    // This detects when the user scrolls down to the bottom then requests a new set of data from the API
+    // There are libraries to cater this but for simplicity, we use the built in ScrollView function
+    // with a little computation included.
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if isRequesting {
             // To handle multiple request when scrollig down multiple times in fast succession.
@@ -180,6 +183,8 @@ extension MovieListViewController: UITableViewDataSource {
             movieCell.overviewLabel.text = movie?.overview
             
             let posterURL = URL(string: getPosterPath(posterPath: movie?.poster_path ?? ""))
+            // SDWebImage is a simple library to display an image using URL
+            // It manages downloading the photo asynchronously
             movieCell.posterImage.sd_setImage(with: posterURL, completed: nil)
             
             return movieCell
