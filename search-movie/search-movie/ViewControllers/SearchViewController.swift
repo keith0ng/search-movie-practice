@@ -28,7 +28,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         let userDefaults = UserDefaults.standard
-        recentSearches = userDefaults.stringArray(forKey: "RecentSearchKey")
+        recentSearches = userDefaults.stringArray(forKey: Constants.DictionaryKeys.RecentSearchKey)
     }
 }
 
@@ -47,7 +47,7 @@ extension SearchViewController {
         mainView?.movieSearchBar.text = ""
     }
     
-    private func showErrorAlert(title: String = "Error", message: String) {
+    private func showErrorAlert(title: String = Constants.ErrorMessages.ErrorTitle, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okAction)
@@ -63,7 +63,7 @@ extension SearchViewController {
 extension SearchViewController: SearchViewDelegate {
     func searchButtonTapped(searchBar: UISearchBar) {
         if (searchBar.text?.isEmpty)! {
-            showErrorAlert(message: "Please enter a keyword")
+            showErrorAlert(message: Constants.ErrorMessages.EnterKeywordError)
             return
         }
         showMovieList(searchString: searchBar.text ?? "")
@@ -96,7 +96,7 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "cellReuseIdentifier")
+        let cell = UITableViewCell(style: .default, reuseIdentifier: Constants.ReuseIdentifier.SearchTableCell)
         let row = indexPath.row
         cell.textLabel?.text = recentSearches?[row]
         return cell

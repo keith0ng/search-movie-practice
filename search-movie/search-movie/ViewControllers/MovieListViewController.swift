@@ -41,7 +41,7 @@ class MovieListViewController: UIViewController {
         mainView?.tableView?.rowHeight = UITableView.automaticDimension
         
         let movieCell = UINib(nibName: "MovieTableViewCell", bundle: nil)
-        mainView?.tableView?.register(movieCell, forCellReuseIdentifier: "MovieTableViewCellReuseIdentifier")
+        mainView?.tableView?.register(movieCell, forCellReuseIdentifier: Constants.ReuseIdentifier.MovieTableCell)
         
         getSearchResults(keyword: searchKeyword, page: currentPage)
     }
@@ -56,7 +56,7 @@ extension MovieListViewController {
         // Alamofire is the most common library used and wrapped for API requests.
         // For simplicity, use the URL Session.
         
-        let url = "https://api.themoviedb.org/3/search/movie?api_key=4b951e36d117bbc88ac54eccece53258&query=\(keyword ?? "")&page=\(page)"
+        let url = "\(Constants.API.GetMovieURL)api_key=\(Constants.API.APIKey)&query=\(keyword ?? "")&page=\(page)"
         
         let request = NSMutableURLRequest(url: URL(string: url)!)
         let session = URLSession.shared
@@ -68,7 +68,7 @@ extension MovieListViewController {
         
         let task = session.dataTask(with: request as URLRequest, completionHandler: {data, response, err -> Void in
             if err != nil { // Handle any type of error. Let the user try the search again
-                self.showErrorAlert(message: "Something went wrong. Please try again.")
+                self.showErrorAlert(message: Constants.ErrorMessages.GenericError)
             } else {
                 let movieResult = self.getMovieResult(data: data)
                 self.totalPage = movieResult?.total_pages ?? 0
@@ -78,7 +78,7 @@ extension MovieListViewController {
                     self.movieArray?.append(contentsOf: moviesFromData)
                     self.saveSearch(keyword ?? "")
                 } else {
-                    self.showErrorAlert(message: "No results found")
+                    self.showErrorAlert(message: Constants.ErrorMessages.NoResultsError)
                 }
             }
             self.isRequesting = false
@@ -102,13 +102,13 @@ extension MovieListViewController {
     }
     
     private func getPosterPath(posterPath: String?) -> String {
-        return "https://image.tmdb.org/t/p/original/\(posterPath ?? "")"
+        return "\(Constants.API.PosterURLPath)\(posterPath ?? "")"
     }
 }
 
 // MARK: - Helper Methods
 extension MovieListViewController {
-    func showErrorAlert(title: String = "Error", message: String) {
+    func showErrorAlert(title: String = Constants.ErrorMessages.ErrorTitle, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
             self.navigationController?.popViewController(animated: true)
@@ -124,7 +124,7 @@ extension MovieListViewController {
     private func saveSearch(_ searchString: String) {
         
         let userDefaults = UserDefaults.standard
-        var recentSearchArray = userDefaults.stringArray(forKey: "RecentSearchKey")
+        var recentSearchArray = userDefaults.stringArray(forKey: Constants.DictionaryKeys.RecentSearchKey)
         
         if recentSearchArray == nil {
             recentSearchArray = []
@@ -137,7 +137,7 @@ extension MovieListViewController {
         }
         recentSearchArray?.insert(searchString, at: 0)
         
-        userDefaults.set(recentSearchArray, forKey: "RecentSearchKey")
+        userDefaults.set(recentSearchArray, forKey: Constants.DictionaryKeys.RecentSearchKey)
     }
 }
 
@@ -169,7 +169,7 @@ extension MovieListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let movieCell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCellReuseIdentifier") as? MovieTableViewCell {
+        if let movieCell = tableView.dequeueReusableCell(withIdentifier: Constants.ReuseIdentifier.MovieTableCell) as? MovieTableViewCell {
             let row = indexPath.row
             let movie = movieArray?[row]
             movieCell.titleLabel.text = movie?.title
