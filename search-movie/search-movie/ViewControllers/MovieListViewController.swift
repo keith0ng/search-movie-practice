@@ -42,7 +42,6 @@ class MovieListViewController: UIViewController {
         
         let movieCell = UINib(nibName: "MovieTableViewCell", bundle: nil)
         mainView?.tableView?.register(movieCell, forCellReuseIdentifier: Constants.ReuseIdentifier.MovieTableCell)
-        
         getSearchResults(keyword: searchKeyword, page: currentPage)
     }
 }
@@ -52,6 +51,8 @@ class MovieListViewController: UIViewController {
 extension MovieListViewController {
     
     private func getSearchResults(keyword: String?, page: Int) {
+        
+        mainView?.loadingIndicator.isHidden = false
         // Create a wrapper class for your API requests especially on projects with several endpoints.
         // Alamofire is the most common library used and wrapped for API requests.
         // For simplicity, use the URL Session.
@@ -82,6 +83,7 @@ extension MovieListViewController {
                 }
             }
             self.isRequesting = false
+            DispatchQueue.main.async { self.mainView?.loadingIndicator.isHidden = true }
         })
         
         isRequesting = true
