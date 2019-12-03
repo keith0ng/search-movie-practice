@@ -30,20 +30,42 @@ class SearchViewController: UIViewController {
         let userDefaults = UserDefaults.standard
         recentSearches = userDefaults.stringArray(forKey: "RecentSearchKey")
     }
+}
+
+
+// MARK: - Helper Methods
+extension SearchViewController {
     
-    func showMovieList(searchString: String) {
+    private func showMovieList(searchString: String) {
         mainView?.tableView.isHidden = true
         mainView?.movieSearchBar.resignFirstResponder()
+        
         let movieListVC = MovieListViewController()
         movieListVC.searchKeyword = searchString
         navigationController?.pushViewController(movieListVC, animated: true)
         
         mainView?.movieSearchBar.text = ""
     }
+    
+    private func showErrorAlert(title: String = "Error", message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okAction)
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
 }
 
+
+// MARK: - SearchViewDelegate
 extension SearchViewController: SearchViewDelegate {
     func searchButtonTapped(searchBar: UISearchBar) {
+        if (searchBar.text?.isEmpty)! {
+            showErrorAlert(message: "Please enter a keyword")
+            return
+        }
         showMovieList(searchString: searchBar.text ?? "")
     }
     
@@ -58,6 +80,8 @@ extension SearchViewController: SearchViewDelegate {
     }
 }
 
+
+// MARK: - UITableViewDelegate
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
@@ -65,6 +89,7 @@ extension SearchViewController: UITableViewDelegate {
     }
 }
 
+// MARK: - UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recentSearches?.count ?? 0

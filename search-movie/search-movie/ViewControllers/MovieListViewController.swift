@@ -42,17 +42,19 @@ class MovieListViewController: UIViewController {
         
         let movieCell = UINib(nibName: "MovieTableViewCell", bundle: nil)
         mainView?.tableView?.register(movieCell, forCellReuseIdentifier: "MovieTableViewCellReuseIdentifier")
+        
         getSearchResults(keyword: searchKeyword, page: currentPage)
     }
-    
-    private func getPosterPath(posterPath: String?) -> String {
-        return "https://image.tmdb.org/t/p/original/\(posterPath ?? "")"
-    }
+}
+
+
+// MARK: - API Request Methods
+extension MovieListViewController {
     
     private func getSearchResults(keyword: String?, page: Int) {
-        // Use a better API request especially on projects with several endpoints. Alamofire is the most common.
+        // Create a wrapper class for your API requests especially on projects with several endpoints.
+        // Alamofire is the most common library used and wrapped for API requests.
         // For simplicity, use the URL Session.
-        
         
         let url = "https://api.themoviedb.org/3/search/movie?api_key=4b951e36d117bbc88ac54eccece53258&query=\(keyword ?? "")&page=\(page)"
         
@@ -86,7 +88,40 @@ class MovieListViewController: UIViewController {
         task.resume()
     }
     
-    func saveSearch(_ searchString: String) {
+    private func getMovieResult(data: Data?) -> GetMovieResult? {
+        if let _ = data {
+            do {
+                var movieResult: GetMovieResult
+                try movieResult = JSONDecoder().decode(GetMovieResult.self, from: data!)
+                return movieResult
+            } catch {
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    private func getPosterPath(posterPath: String?) -> String {
+        return "https://image.tmdb.org/t/p/original/\(posterPath ?? "")"
+    }
+}
+
+// MARK: - Helper Methods
+extension MovieListViewController {
+    func showErrorAlert(title: String = "Error", message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            self.navigationController?.popViewController(animated: true)
+        })
+        alert.addAction(okAction)
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    private func saveSearch(_ searchString: String) {
         
         let userDefaults = UserDefaults.standard
         var recentSearchArray = userDefaults.stringArray(forKey: "RecentSearchKey")
@@ -104,40 +139,30 @@ class MovieListViewController: UIViewController {
         
         userDefaults.set(recentSearchArray, forKey: "RecentSearchKey")
     }
-    
-    
-    private func getMovieResult(data: Data?) -> GetMovieResult? {
-        if let _ = data {
-            do {
-                var movieResult: GetMovieResult
-                try movieResult = JSONDecoder().decode(GetMovieResult.self, from: data!)
-                return movieResult
-            } catch {
-                return nil
+}
+
+
+// MARK: - UITableViewDelegate
+extension MovieListViewController: UITableViewDelegate {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if isRequesting {
+            // To handle multiple request when scrollig down multiple times in fast succession.
+            return
+        }
+        
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if (maximumOffset - currentOffset) <= 10.0 {
+            let nextPage = currentPage + 1
+            if nextPage <= totalPage {
+                getSearchResults(keyword: searchKeyword, page: nextPage)
             }
         }
-        return nil
     }
-    
-    func showErrorAlert(title: String = "Error", message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            self.navigationController?.popViewController(animated: true)
-        })
-        alert.addAction(okAction)
-        
-        DispatchQueue.main.async {
-            self.present(alert, animated: true, completion: nil)
-        }
-        
-    }
-
 }
 
-extension MovieListViewController: UITableViewDelegate {
-    
-}
-
+// MARK: - UITableViewDataSource
 extension MovieListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movieArray?.count ?? 0
@@ -160,22 +185,5 @@ extension MovieListViewController: UITableViewDataSource {
         
         
         return UITableViewCell()
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if isRequesting {
-            // To handle multiple request when scrollig down multiple times in fast succession.
-            return
-        }
-        
-        let currentOffset = scrollView.contentOffset.y
-        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-        
-        if (maximumOffset - currentOffset) <= 10.0 {
-            let nextPage = currentPage + 1
-            if nextPage <= totalPage {
-                getSearchResults(keyword: searchKeyword, page: nextPage)
-            }
-        }
     }
 }
